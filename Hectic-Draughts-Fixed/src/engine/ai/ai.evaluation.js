@@ -13,13 +13,17 @@ import {
     isValidSquare 
 } from './ai.utils.js';
 
+// Helper: Mirror column for flipped board (col 0 is left, col 9 is right)
+const FLIP_COL = col => 9 - col;
+
 // Piece base values
 const PIECE_VALUES = {
     MAN: 100,
     KING: 450
 };
 
-// Positional value tables (mirrored for black)
+// Positional value tables for a STANDARD board (White's perspective).
+// Our code will flip the column index at lookup time to match our flipped board.
 const MAN_PST = [
     [  0,  30,   0,  30,   0,  30,   0,  30,   0,  30],
     [ 25,   0,  28,   0,  28,   0,  28,   0,  28,   0],
@@ -51,8 +55,6 @@ const KING_PST = [
  */
 export function evaluatePosition(ai, position) {
     const cacheKey = ai.cache.generateKey(position);
-    
-    // Check evaluation cache
     if (ai.evalCache.has(cacheKey)) {
         return ai.evalCache.get(cacheKey);
     }
@@ -67,7 +69,7 @@ export function evaluatePosition(ai, position) {
         blackMen: 0
     };
 
-    // First pass: collect pieces and basic material
+    // Collect pieces and material
     for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
             const piece = position.pieces[r][c];
@@ -94,38 +96,29 @@ export function evaluatePosition(ai, position) {
     if (pieces.black.length === 0) return position.currentPlayer === PLAYER.WHITE ? 10000 : -10000;
 
     const gamePhase = getGamePhase(position);
-    
-    // Material evaluation
     const whiteMaterial = pieces.whiteMen * PIECE_VALUES.MAN + pieces.whiteKings * PIECE_VALUES.KING;
     const blackMaterial = pieces.blackMen * PIECE_VALUES.MAN + pieces.blackKings * PIECE_VALUES.KING;
     score = whiteMaterial - blackMaterial;
 
-    // PATCH: Use flipped row logic for piece-square and advancement
+    // Use FLIPPED logic for PST and bonuses
     pieces.white.forEach(p => {
         score += evaluatePiecePositionFlipped(p, true, gamePhase);
     });
-    
     pieces.black.forEach(p => {
         score -= evaluatePiecePositionFlipped(p, false, gamePhase);
     });
 
-    // Advanced evaluations
+    // [rest of function unchanged...]
     const mobility = evaluateMobilityDifferential(ai, position);
     const threats = evaluateTacticalThreats(ai, position, pieces);
     const control = evaluateStrategicControl(position, gamePhase, pieces);
     const formations = evaluateFormations(position, pieces);
-    
-    // Threat heatmaps
     const threatMaps = generateThreatMaps(ai, position, pieces);
     const heatmapScore = evaluateHeatmaps(position, pieces, threatMaps);
-    
-    // Endgame specific
     let endgameScore = 0;
     if (gamePhase === 'endgame') {
         endgameScore = evaluateEndgame(position, pieces);
     }
-
-    // Combine all factors with phase-dependent weights
     const weights = getPhaseWeights(gamePhase);
     score += mobility * weights.mobility;
     score += threats * weights.tactics;
@@ -133,68 +126,53 @@ export function evaluatePosition(ai, position) {
     score += formations * weights.formations;
     score += heatmapScore * weights.threats;
     score += endgameScore * weights.endgame;
-
-    // Tempo bonus for side to move
     score += position.currentPlayer === PLAYER.WHITE ? 10 : -10;
-
-    // Convert to current player's perspective
     const finalScore = position.currentPlayer === PLAYER.WHITE ? score : -score;
-    
-    // Cache the evaluation
     ai.evalCache.set(cacheKey, finalScore);
-    
     return finalScore;
 }
 
 /**
- * Evaluates a single piece's positional value (PATCHED for FLIPPED board)
+ * Evaluates a single piece's positional value (FLIPPED for horizontal mirror)
  */
 function evaluatePiecePositionFlipped(pieceInfo, isWhite, gamePhase) {
     const row = pieceInfo.row;
     const col = pieceInfo.col;
     const piece = pieceInfo.piece;
     const isKing = piece === PIECE.WHITE_KING || piece === PIECE.BLACK_KING;
-    
     let score = 0;
-    
-    // Use piece square tables (PATCHED: row index is flipped)
+    const mirroredCol = FLIP_COL(col);
+
     if (isKing) {
-        // For kings, centralization is still fine with flipped row
-        // White and Black now use same row index for their perspective
-        score += isWhite ? KING_PST[row][col] : KING_PST[9 - row][col];
+        // Centralization: mirror col for true center
+        score += isWhite ? KING_PST[row][mirroredCol] : KING_PST[9 - row][mirroredCol];
+        if (gamePhase === 'endgame') {
+            const centerDist = Math.abs(row - 4.5) + Math.abs(mirroredCol - 4.5);
+            score += (15 - centerDist) * 2;
+        }
     } else {
-        // For men, PATCHED for flipped board:
-        // White men advance as row increases, Black as row decreases
-        score += isWhite ? MAN_PST[row][col] : MAN_PST[9 - row][col];
-        
-        // PATCHED: Advancement bonus for men (promotion at row 9 for White, row 0 for Black)
+        score += isWhite ? MAN_PST[row][mirroredCol] : MAN_PST[9 - row][mirroredCol];
+        // Advancement bonuses
         if (isWhite) {
-            // White advances "up" (row increases), promotes at row 9
-            score += row * 3; // Closer to promotion as row increases
-            if (row >= 7) score += 20; // Near promotion
-            if (row === 8) score += 30; // One move from promotion
+            score += row * 3;
+            if (row >= 7) score += 20;
+            if (row === 8) score += 30;
         } else {
-            // Black advances "down" (row decreases), promotes at row 0
             score += (9 - row) * 3;
             if (row <= 2) score += 20;
             if (row === 1) score += 30;
         }
     }
-    
-    // King activity in endgame
-    if (isKing && gamePhase === 'endgame') {
-        // Centralization bonus
-        const centerDist = Math.abs(row - 4.5) + Math.abs(col - 4.5);
-        score += (15 - centerDist) * 2;
-    }
-    
+
     // Edge penalty for men
     if (!isKing && (row === 0 || row === 9 || col === 0 || col === 9)) {
         score -= 5;
     }
-    
+
     return score;
 }
+
+// ... rest of the file remains unchanged ...
 
 /**
  * Evaluates mobility differential
