@@ -262,6 +262,7 @@ export function evaluateBreakthroughPotential(ai, position, piece) {
     if (isKing) return 0; // Kings don't need breakthrough
     
     let score = 0;
+    // PATCH: For "White moves up", promotionRow is 0; Black moves down, promotionRow is 9.
     const promotionRow = isWhite ? 0 : 9;
     const distance = Math.abs(row - promotionRow);
     
@@ -269,6 +270,7 @@ export function evaluateBreakthroughPotential(ai, position, piece) {
     score = (10 - distance) * 10;
     
     // Check if path is clear
+    // PATCH: For White, direction = -1 (up), for Black, direction = +1 (down)
     const direction = isWhite ? -1 : 1;
     let obstacles = 0;
     let r = row + direction;
@@ -373,6 +375,7 @@ function evaluateCapturePositional(position, move) {
     // Bonus for captures near promotion
     const piece = position.pieces[move.from.row][move.from.col];
     const isWhite = piece === PIECE.WHITE || piece === PIECE.WHITE_KING;
+    // PATCH: For "White moves up", promotionRow is 0; Black moves down, promotionRow is 9.
     const promotionRow = isWhite ? 0 : 9;
     const distanceToPromotion = Math.abs(move.to.row - promotionRow);
     
@@ -403,6 +406,7 @@ function createsDiscoveredAttack(ai, position, move) {
 function isSacrificialBreakthrough(ai, position, move) {
     const piece = position.pieces[move.from.row][move.from.col];
     const isWhite = piece === PIECE.WHITE || piece === PIECE.WHITE_KING;
+    // PATCH: For "White moves up", promotionRow is 0; Black moves down, promotionRow is 9.
     const promotionRow = isWhite ? 0 : 9;
     
     // Check if move gets us very close to promotion
