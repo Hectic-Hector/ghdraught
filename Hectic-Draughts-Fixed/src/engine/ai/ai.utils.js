@@ -1,6 +1,6 @@
 /**
  * AI Utilities Module - Core functions for move generation and board operations
- * Extracted and enhanced from the original GrandmasterAI
+ * PATCHED for horizontally flipped board (col 0 = left, col 9 = right, row 0 = top, row 9 = bottom, White promotes at row 9, Black at row 0)
  * @module ai.utils
  */
 
@@ -238,8 +238,9 @@ export function addNormalMovesForPiece(moves, position, r, c) {
         }
     } else {
         // Regular piece movement
+        // PATCH: For your flipped board, White moves "down" (increasing row), Black moves "up" (decreasing row)
         const dirs = position.currentPlayer === PLAYER.WHITE ? 
-            DIRECTIONS.WHITE_MOVES : DIRECTIONS.BLACK_MOVES;
+            DIRECTIONS.WHITE_MOVES_FLIPPED : DIRECTIONS.BLACK_MOVES_FLIPPED;
         
         for (const d of dirs) {
             const nr = r + d.dy;
@@ -279,10 +280,11 @@ export function getPieceCapturesFrom(position, piecePos) {
 
 /**
  * Checks if a piece should be promoted
+ * PATCHED: White promotes at row 9, Black at row 0
  */
 export function shouldPromote(piece, row) {
-    return (piece === PIECE.WHITE && row === 0) || 
-           (piece === PIECE.BLACK && row === BOARD_SIZE - 1);
+    return (piece === PIECE.WHITE && row === BOARD_SIZE - 1) || 
+           (piece === PIECE.BLACK && row === 0);
 }
 
 /**
@@ -290,9 +292,6 @@ export function shouldPromote(piece, row) {
  */
 export function getMoveNotation(move) {
     if (!move || !move.from || !move.to) return '--';
-    
-    // For now, simple coordinate notation
-    // Could be enhanced to use standard draughts notation
     const from = `${move.from.row},${move.from.col}`;
     const to = `${move.to.row},${move.to.col}`;
     return move.captures && move.captures.length > 0 ? 
