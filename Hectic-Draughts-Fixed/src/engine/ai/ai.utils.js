@@ -1,6 +1,6 @@
 /**
  * AI Utilities Module - Core functions for move generation and board operations
- * PATCHED for horizontally flipped board (col 0 = left, col 9 = right, row 0 = top, row 9 = bottom, White promotes at row 9, Black at row 0)
+ * Extracted and enhanced from the original GrandmasterAI
  * @module ai.utils
  */
 
@@ -212,44 +212,60 @@ export function findCaptureSequences(sequences, pieces, currentPos, path, captur
 
 /**
  * Adds normal (non-capture) moves for a piece
+ * PATCHED: Defensive against bad currentPlayer, logs error/warning for debugging.
  */
 export function addNormalMovesForPiece(moves, position, r, c) {
     const piece = position.pieces[r][c];
     const isKing = piece === PIECE.WHITE_KING || piece === PIECE.BLACK_KING;
-    
+
     if (isKing) {
         // Flying king movement
         const dirs = DIRECTIONS.KING_MOVES;
-        
         for (const d of dirs) {
             let nr = r + d.dy;
             let nc = c + d.dx;
-            
             while (isValidSquare(nr, nc) && position.pieces[nr][nc] === PIECE.NONE && isDarkSquare(nr, nc)) {
-                moves.push({ 
-                    from: { row: r, col: c }, 
-                    to: { row: nr, col: nc }, 
-                    captures: [] 
+                moves.push({
+                    from: { row: r, col: c },
+                    to: { row: nr, col: nc },
+                    captures: []
                 });
-                
                 nr += d.dy;
                 nc += d.dx;
             }
         }
     } else {
-        // Regular piece movement
-        // PATCH: For your flipped board, White moves "down" (increasing row), Black moves "up" (decreasing row)
-        const dirs = position.currentPlayer === PLAYER.WHITE ? 
-            DIRECTIONS.WHITE_MOVES_FLIPPED : DIRECTIONS.BLACK_MOVES_FLIPPED;
-        
+        // PATCH: Defensive directional lookup with fallback and debug log
+        let dirs;
+        if (position.currentPlayer === PLAYER.WHITE) {
+            dirs = DIRECTIONS.WHITE_MOVES;
+        } else if (position.currentPlayer === PLAYER.BLACK) {
+            dirs = DIRECTIONS.BLACK_MOVES;
+        } else {
+            // Fallback: try to infer based on piece color (should NOT happen!)
+            if (piece === PIECE.WHITE) {
+                dirs = DIRECTIONS.WHITE_MOVES;
+            } else if (piece === PIECE.BLACK) {
+                dirs = DIRECTIONS.BLACK_MOVES;
+            } else {
+                dirs = [];
+            }
+            console.warn('addNormalMovesForPiece: Unexpected currentPlayer value', position.currentPlayer, 'at', r, c, 'piece:', piece, 'using fallback dirs:', dirs);
+        }
+
+        if (!dirs || !Array.isArray(dirs)) {
+            console.error('addNormalMovesForPiece: dirs is not iterable. position.currentPlayer=', position.currentPlayer, 'piece=', piece, 'at', r, c, 'dirs:', dirs);
+            return;
+        }
+
         for (const d of dirs) {
             const nr = r + d.dy;
             const nc = c + d.dx;
             if (isValidSquare(nr, nc) && position.pieces[nr][nc] === PIECE.NONE && isDarkSquare(nr, nc)) {
-                moves.push({ 
-                    from: { row: r, col: c }, 
-                    to: { row: nr, col: nc }, 
-                    captures: [] 
+                moves.push({
+                    from: { row: r, col: c },
+                    to: { row: nr, col: nc },
+                    captures: []
                 });
             }
         }
@@ -280,11 +296,10 @@ export function getPieceCapturesFrom(position, piecePos) {
 
 /**
  * Checks if a piece should be promoted
- * PATCHED: White promotes at row 9, Black at row 0
  */
 export function shouldPromote(piece, row) {
-    return (piece === PIECE.WHITE && row === BOARD_SIZE - 1) || 
-           (piece === PIECE.BLACK && row === 0);
+    return (piece === PIECE.WHITE && row === 0) || 
+           (piece === PIECE.BLACK && row === BOARD_SIZE - 1);
 }
 
 /**
@@ -292,6 +307,9 @@ export function shouldPromote(piece, row) {
  */
 export function getMoveNotation(move) {
     if (!move || !move.from || !move.to) return '--';
+    
+    // For now, simple coordinate notation
+    // Could be enhanced to use standard draughts notation
     const from = `${move.from.row},${move.from.col}`;
     const to = `${move.to.row},${move.to.col}`;
     return move.captures && move.captures.length > 0 ? 
