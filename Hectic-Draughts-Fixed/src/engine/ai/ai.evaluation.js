@@ -100,13 +100,13 @@ export function evaluatePosition(ai, position) {
     const blackMaterial = pieces.blackMen * PIECE_VALUES.MAN + pieces.blackKings * PIECE_VALUES.KING;
     score = whiteMaterial - blackMaterial;
 
-    // Positional evaluation with piece square tables
+    // PATCH: Use flipped row logic for piece-square and advancement
     pieces.white.forEach(p => {
-        score += evaluatePiecePosition(p, true, gamePhase);
+        score += evaluatePiecePositionFlipped(p, true, gamePhase);
     });
     
     pieces.black.forEach(p => {
-        score -= evaluatePiecePosition(p, false, gamePhase);
+        score -= evaluatePiecePositionFlipped(p, false, gamePhase);
     });
 
     // Advanced evaluations
@@ -147,9 +147,9 @@ export function evaluatePosition(ai, position) {
 }
 
 /**
- * Evaluates a single piece's positional value
+ * Evaluates a single piece's positional value (PATCHED for FLIPPED board)
  */
-function evaluatePiecePosition(pieceInfo, isWhite, gamePhase) {
+function evaluatePiecePositionFlipped(pieceInfo, isWhite, gamePhase) {
     const row = pieceInfo.row;
     const col = pieceInfo.col;
     const piece = pieceInfo.piece;
@@ -157,21 +157,27 @@ function evaluatePiecePosition(pieceInfo, isWhite, gamePhase) {
     
     let score = 0;
     
-    // Use piece square tables
+    // Use piece square tables (PATCHED: row index is flipped)
     if (isKing) {
+        // For kings, centralization is still fine with flipped row
+        // White and Black now use same row index for their perspective
         score += isWhite ? KING_PST[row][col] : KING_PST[9 - row][col];
     } else {
+        // For men, PATCHED for flipped board:
+        // White men advance as row increases, Black as row decreases
         score += isWhite ? MAN_PST[row][col] : MAN_PST[9 - row][col];
         
-        // Advancement bonus for men
+        // PATCHED: Advancement bonus for men (promotion at row 9 for White, row 0 for Black)
         if (isWhite) {
-            score += (9 - row) * 3; // Closer to promotion
-            if (row <= 2) score += 20; // Near promotion
-            if (row === 1) score += 30; // One move from promotion
+            // White advances "up" (row increases), promotes at row 9
+            score += row * 3; // Closer to promotion as row increases
+            if (row >= 7) score += 20; // Near promotion
+            if (row === 8) score += 30; // One move from promotion
         } else {
-            score += row * 3;
-            if (row >= 7) score += 20;
-            if (row === 8) score += 30;
+            // Black advances "down" (row decreases), promotes at row 0
+            score += (9 - row) * 3;
+            if (row <= 2) score += 20;
+            if (row === 1) score += 30;
         }
     }
     
@@ -459,8 +465,8 @@ export function simulateOpponentPlan(position, opponentMoves) {
     for (const move of opponentMoves) {
         // Promotion threat
         const piece = position.pieces[move.from.row][move.from.col];
-        if ((piece === PIECE.WHITE && move.to.row === 0) || 
-            (piece === PIECE.BLACK && move.to.row === 9)) {
+        if ((piece === PIECE.WHITE && move.to.row === 9) || 
+            (piece === PIECE.BLACK && move.to.row === 0)) {
             maxThreat += 50;
         }
         
