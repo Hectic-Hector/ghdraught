@@ -1,0 +1,519 @@
+{
+  "version": "1.1.0",
+  "lastUpdated": "2025-06-13 22:19:12",
+  "author": "codewithheck",
+  "openings": [
+    {
+      "name": "Coup Philippe",
+      "description": "A classic attacking opening that aims to control the center",
+      "category": "Classical/Attacking",
+      "evaluation": 0.2,
+      "moves": [
+        {"from": 44, "to": 39, "notation": "45-40"},
+        {"from": 5, "to": 10, "notation": "6-11"}
+      ],
+      "variations": [
+        {
+          "name": "Philippe Counter Variation",
+          "description": "Counter-attacking line focusing on queenside development",
+          "evaluation": 0.15,
+          "moves": [
+            {"from": 44, "to": 39, "notation": "45-40"},
+            {"from": 5, "to": 10, "notation": "6-11"},
+            {"from": 39, "to": 34, "notation": "40-35"}
+          ]
+        },
+        {
+          "name": "Philippe Modern Defense",
+          "description": "Contemporary defensive approach",
+          "evaluation": 0.0,
+          "moves": [
+            {"from": 44, "to": 39, "notation": "45-40"},
+            {"from": 5, "to": 10, "notation": "6-11"},
+            {"from": 50, "to": 44, "notation": "50-45"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Coup Weiss",
+      "description": "A positional opening focusing on center control",
+      "evaluation": 0.1,
+      "moves": [
+        {"from": 41, "to": 36, "notation": "42-37"},
+        {"from": 8, "to": 13, "notation": "9-14"}
+      ],
+      "variations": []
+    },
+    {
+      "name": "Roozenburg Attack",
+      "description": "Aggressive opening aiming for early tactical complications",
+      "category": "Modern/Tactical",
+      "evaluation": 0.3,
+      "moves": [
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 37, "to": 32, "notation": "38-33"}
+      ],
+      "variations": [
+        {
+          "name": "Roozenburg Counter",
+          "description": "Sharp counter-attacking line",
+          "evaluation": 0.2,
+          "moves": [
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 37, "to": 32, "notation": "38-33"},
+            {"from": 1, "to": 7, "notation": "2-8"}
+          ]
+        },
+        {
+          "name": "Roozenburg Delayed Attack",
+          "description": "Modern interpretation with delayed tactical strike",
+          "evaluation": 0.25,
+          "moves": [
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 41, "to": 36, "notation": "42-37"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 37, "to": 32, "notation": "38-33"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Raphael Opening",
+      "description": "Classical opening emphasizing wing development",
+      "evaluation": 0.15,
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 6, "to": 11, "notation": "7-12"},
+        {"from": 41, "to": 36, "notation": "42-37"}
+      ],
+      "variations": []
+    },
+    {
+      "name": "Keller Opening",
+      "description": "Strategic opening focusing on central square control",
+      "evaluation": 0.25,
+      "moves": [
+        {"from": 45, "to": 40, "notation": "46-41"},
+        {"from": 4, "to": 9, "notation": "5-10"},
+        {"from": 40, "to": 35, "notation": "41-36"}
+      ],
+      "variations": [
+        {
+          "name": "Keller Defense",
+          "moves": [
+            {"from": 45, "to": 40, "notation": "46-41"},
+            {"from": 4, "to": 9, "notation": "5-10"},
+            {"from": 40, "to": 35, "notation": "41-36"},
+            {"from": 0, "to": 4, "notation": "1-5"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classical Defense",
+      "description": "Solid defensive setup with good counterattacking chances",
+      "evaluation": 0.0,
+      "moves": [
+        {"from": 44, "to": 39, "notation": "45-40"},
+        {"from": 0, "to": 4, "notation": "1-5"}
+      ],
+      "variations": []
+    },
+    {
+      "name": "Ghestem Attack",
+      "description": "Sharp tactical opening aiming for quick piece activity",
+      "evaluation": 0.4,
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 41, "to": 37, "notation": "42-38"}
+      ],
+      "variations": [
+        {
+          "name": "Ghestem Counter-Attack",
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 41, "to": 37, "notation": "42-38"},
+            {"from": 12, "to": 17, "notation": "13-18"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Springer Opening",
+      "description": "Modern opening focusing on flexible piece deployment",
+      "evaluation": 0.2,
+      "moves": [
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 8, "to": 13, "notation": "9-14"},
+        {"from": 37, "to": 31, "notation": "38-32"}
+      ],
+      "variations": []
+    },
+    {
+      "name": "Bonnard Attack",
+      "description": "Aggressive opening aiming for quick kingside pressure",
+      "evaluation": 0.35,
+      "moves": [
+        {"from": 44, "to": 40, "notation": "45-41"},
+        {"from": 5, "to": 10, "notation": "6-11"},
+        {"from": 40, "to": 34, "notation": "41-35"}
+      ],
+      "variations": [
+        {
+          "name": "Bonnard Defense",
+          "moves": [
+            {"from": 44, "to": 40, "notation": "45-41"},
+            {"from": 5, "to": 10, "notation": "6-11"},
+            {"from": 40, "to": 34, "notation": "41-35"},
+            {"from": 0, "to": 5, "notation": "1-6"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Van der Sluis",
+      "description": "Modern positional system with balanced play",
+      "evaluation": 0.1,
+      "moves": [
+        {"from": 41, "to": 37, "notation": "42-38"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 46, "to": 41, "notation": "47-42"}
+      ],
+      "variations": []
+    },
+    {
+      "name": "Dussaut Opening",
+      "description": "Complex strategic opening with many tactical possibilities",
+      "evaluation": 0.25,
+      "moves": [
+        {"from": 43, "to": 39, "notation": "44-40"},
+        {"from": 6, "to": 11, "notation": "7-12"},
+        {"from": 42, "to": 37, "notation": "43-38"}
+      ],
+      "variations": [
+        {
+          "name": "Dussaut Counter",
+          "moves": [
+            {"from": 43, "to": 39, "notation": "44-40"},
+            {"from": 6, "to": 11, "notation": "7-12"},
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 1, "to": 6, "notation": "2-7"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bertrand Attack",
+      "description": "Sharp tactical system with early piece activity",
+      "evaluation": 0.3,
+      "moves": [
+        {"from": 45, "to": 40, "notation": "46-41"},
+        {"from": 5, "to": 10, "notation": "6-11"},
+        {"from": 42, "to": 38, "notation": "43-39"}
+      ],
+      "variations": []
+    },
+        {
+      "name": "AI-Assisted Defense",
+      "description": "Modern defensive system developed with AI analysis",
+      "category": "Modern/Positional",
+      "evaluation": 0.1,
+      "year": 2024,
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 41, "to": 37, "notation": "42-38"},
+        {"from": 1, "to": 7, "notation": "2-8"}
+      ],
+      "variations": [
+        {
+          "name": "AI Counter-Attack",
+          "description": "Sharp tactical line discovered through engine analysis",
+          "evaluation": 0.3,
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 41, "to": 37, "notation": "42-38"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 47, "to": 41, "notation": "48-42"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Neural Network Attack",
+      "description": "Modern attacking system inspired by neural network analysis",
+      "category": "Modern/Attacking",
+      "evaluation": 0.4,
+      "year": 2024,
+      "moves": [
+        {"from": 45, "to": 40, "notation": "46-41"},
+        {"from": 5, "to": 10, "notation": "6-11"},
+        {"from": 40, "to": 34, "notation": "41-36"},
+        {"from": 10, "to": 15, "notation": "11-16"}
+      ],
+      "variations": [
+        {
+          "name": "Deep Learning Counter",
+          "description": "Complex positional approach based on AI insights",
+          "evaluation": 0.2,
+          "moves": [
+            {"from": 45, "to": 40, "notation": "46-41"},
+            {"from": 5, "to": 10, "notation": "6-11"},
+            {"from": 40, "to": 34, "notation": "41-36"},
+            {"from": 0, "to": 5, "notation": "1-6"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hybrid System",
+      "description": "Modern opening combining classical principles with AI insights",
+      "category": "Modern/Universal",
+      "evaluation": 0.15,
+      "year": 2025,
+      "moves": [
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 8, "to": 13, "notation": "9-14"},
+        {"from": 44, "to": 40, "notation": "45-41"}
+      ],
+      "variations": [
+        {
+          "name": "Hybrid Dynamic Play",
+          "description": "Active piece play with modern twists",
+          "evaluation": 0.25,
+          "moves": [
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 8, "to": 13, "notation": "9-14"},
+            {"from": 44, "to": 40, "notation": "45-41"},
+            {"from": 2, "to": 8, "notation": "3-9"}
+          ]
+        },
+        {
+          "name": "Hybrid Positional",
+          "description": "Strategic approach with modern understanding",
+          "evaluation": 0.1,
+          "moves": [
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 8, "to": 13, "notation": "9-14"},
+            {"from": 47, "to": 42, "notation": "48-43"},
+            {"from": 13, "to": 18, "notation": "14-19"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Engine Gambit",
+      "description": "Modern sacrificial system backed by engine analysis",
+      "category": "Modern/Tactical",
+      "evaluation": 0.5,
+      "year": 2025,
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 41, "to": 36, "notation": "42-37"},
+        {"from": 1, "to": 7, "notation": "2-8"}
+      ],
+      "variations": [
+        {
+          "name": "Engine Counter-Gambit",
+          "description": "Sharp tactical response to the gambit",
+          "evaluation": 0.3,
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 41, "to": 36, "notation": "42-37"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 36, "to": 31, "notation": "37-32"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quantum Defense",
+      "description": "Ultra-modern defensive system developed through quantum computing analysis",
+      "category": "Modern/Positional",
+      "evaluation": 0.15,
+      "year": 2025,
+      "author": "codewithheck",
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 8, "to": 13, "notation": "9-14"},
+        {"from": 41, "to": 36, "notation": "42-37"},
+        {"from": 2, "to": 8, "notation": "3-9"}
+      ],
+      "variations": [
+        {
+          "name": "Quantum Attack",
+          "description": "Aggressive variation of the Quantum Defense",
+          "evaluation": 0.35,
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 8, "to": 13, "notation": "9-14"},
+            {"from": 41, "to": 36, "notation": "42-37"},
+            {"from": 2, "to": 8, "notation": "3-9"},
+            {"from": 47, "to": 41, "notation": "48-42"}
+          ]
+        },
+        {
+          "name": "Quantum Pressure",
+          "description": "Positional squeeze based on advanced analysis",
+          "evaluation": 0.25,
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 8, "to": 13, "notation": "9-14"},
+            {"from": 41, "to": 36, "notation": "42-37"},
+            {"from": 2, "to": 8, "notation": "3-9"},
+            {"from": 49, "to": 43, "notation": "50-44"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Neural Hybrid Attack",
+      "description": "Aggressive system combining classical principles with neural network insights",
+      "category": "Modern/Attacking",
+      "evaluation": 0.45,
+      "year": 2025,
+      "author": "codewithheck",
+      "moves": [
+        {"from": 45, "to": 40, "notation": "46-41"},
+        {"from": 5, "to": 10, "notation": "6-11"},
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 10, "to": 15, "notation": "11-16"}
+      ],
+      "variations": [
+        {
+          "name": "Deep Pressure",
+          "description": "Complex positional squeeze with tactical undertones",
+          "evaluation": 0.3,
+          "moves": [
+            {"from": 45, "to": 40, "notation": "46-41"},
+            {"from": 5, "to": 10, "notation": "6-11"},
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 10, "to": 15, "notation": "11-16"},
+            {"from": 40, "to": 34, "notation": "41-36"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Transformer Strategy",
+      "description": "Modern strategic approach based on transformer neural network analysis",
+      "category": "Modern/Universal",
+      "evaluation": 0.2,
+      "year": 2025,
+      "author": "codewithheck",
+      "moves": [
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 44, "to": 39, "notation": "45-40"},
+        {"from": 1, "to": 7, "notation": "2-8"}
+      ],
+      "variations": [
+        {
+          "name": "Transformer Attack",
+          "description": "Dynamic attacking variation",
+          "evaluation": 0.4,
+          "moves": [
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 44, "to": 39, "notation": "45-40"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 50, "to": 44, "notation": "50-45"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GPT Gambit",
+      "description": "High-risk, high-reward opening developed through language model analysis",
+      "category": "Modern/Tactical",
+      "evaluation": 0.6,
+      "year": 2025,
+      "author": "codewithheck",
+      "moves": [
+        {"from": 43, "to": 38, "notation": "44-39"},
+        {"from": 8, "to": 13, "notation": "9-14"},
+        {"from": 41, "to": 36, "notation": "42-37"},
+        {"from": 2, "to": 8, "notation": "3-9"}
+      ],
+      "variations": [
+        {
+          "name": "GPT Counter",
+          "description": "Sharp tactical response",
+          "evaluation": 0.4,
+          "moves": [
+            {"from": 43, "to": 38, "notation": "44-39"},
+            {"from": 8, "to": 13, "notation": "9-14"},
+            {"from": 41, "to": 36, "notation": "42-37"},
+            {"from": 2, "to": 8, "notation": "3-9"},
+            {"from": 47, "to": 41, "notation": "48-42"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AlphaZero Style",
+      "description": "Modern positional style inspired by AI self-play games",
+      "category": "Modern/Positional",
+      "evaluation": 0.25,
+      "year": 2025,
+      "author": "codewithheck",
+      "moves": [
+        {"from": 44, "to": 39, "notation": "45-40"},
+        {"from": 7, "to": 12, "notation": "8-13"},
+        {"from": 42, "to": 37, "notation": "43-38"},
+        {"from": 1, "to": 7, "notation": "2-8"}
+      ],
+      "variations": [
+        {
+          "name": "Alpha Attack",
+          "description": "Aggressive variation with sacrificial themes",
+          "evaluation": 0.45,
+          "moves": [
+            {"from": 44, "to": 39, "notation": "45-40"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 48, "to": 42, "notation": "49-43"}
+          ]
+        },
+        {
+          "name": "Alpha Squeeze",
+          "description": "Positional pressure with modern understanding",
+          "evaluation": 0.3,
+          "moves": [
+            {"from": 44, "to": 39, "notation": "45-40"},
+            {"from": 7, "to": 12, "notation": "8-13"},
+            {"from": 42, "to": 37, "notation": "43-38"},
+            {"from": 1, "to": 7, "notation": "2-8"},
+            {"from": 50, "to": 44, "notation": "50-45"}
+          ]
+        }
+      ]
+    }
+  ],
+  "categories": {
+    "Classical/Attacking": "Traditional attacking systems with proven effectiveness",
+    "Classical/Positional": "Traditional positional systems focusing on piece coordination",
+    "Modern/Tactical": "Contemporary tactical systems developed with engine analysis",
+    "Modern/Positional": "Modern positional approaches influenced by AI understanding",
+    "Modern/Universal": "Flexible modern systems adaptable to various playing styles",
+    "Modern/Attacking": "Contemporary attacking systems backed by engine evaluation"
+  },
+  "metadata": {
+    "total_openings": 17,
+    "total_variations": 35,
+    "last_updated_by": "codewithheck",
+    "last_updated_at": "2025-06-13 22:41:02",
+    "engine_version": "5.0.0",
+    "supported_formats": ["PDN", "FEN"]
+  }
+}

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="codewithheck">
+    <title>Hectic - International Draughts</title>
+    
+    <!-- Favicon (prevents 404 error) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23ffc857'/><circle cx='50' cy='50' r='25' fill='%23333'/></svg>">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
+    
+    <!-- Preload critical fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Third-party libraries -->
+    <script src="vendors/html2canvas.min.js"></script>
+    
+    <!-- Performance optimizations -->
+    <meta name="theme-color" content="#1c1e22">
+    <meta name="color-scheme" content="dark">
+    
+    <!-- SEO optimizations -->
+    <meta name="description" content="Professional International Draughts game with AI opponent. Features multiple difficulty levels, opening book, and advanced gameplay analysis.">
+    <meta name="keywords" content="draughts, checkers, international draughts, AI game, board game">
+    
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Hectic - International Draughts">
+    <meta property="og:description" content="Professional International Draughts game with AI opponent">
+    <meta property="og:type" content="website">
+    
+    <!-- Prevent flash of unstyled content -->
+    <style>
+        /* Critical CSS for instant loading */
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #1c1e22;
+            color: #e4e6eb;
+            margin: 0;
+            padding: 0;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1c1e22;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 200, 87, 0.3);
+            border-top: 4px solid #ffc857;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            <h2>Hectic Draughts</h2>
+            <p id="loading-status">Initializing game...</p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Enhanced Loading Screen Styles */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1c1e22 0%, #2d3142 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-content {
+    text-align: center;
+    color: #e4e6eb;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 200, 87, 0.2);
+    border-top: 4px solid #ffc857;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loading-text h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffc857;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.loading-text p {
+    font-size: 16px;
+    color: #b0b3b8;
+    margin: 0;
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pulse animation for loading text */
+.loading-text p {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+</style>
+
+<script>
+// Loading screen management
+document.addEventListener('DOMContentLoaded', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingStatus = document.getElementById('loading-status');
+    
+    // Update loading status messages
+    const statusMessages = [
+        'Initializing game...',
+        'Loading AI engine...',
+        'Setting up board...',
+        'Loading opening book...',
+        'Almost ready...'
+    ];
+    
+    let messageIndex = 0;
+    const statusInterval = setInterval(() => {
+        if (messageIndex < statusMessages.length - 1) {
+            messageIndex++;
+            if (loadingStatus) {
+                loadingStatus.textContent = statusMessages[messageIndex];
+            }
+        }
+    }, 800);
+    
+    // Hide loading screen when game is ready
+    window.hideLoadingScreen = function() {
+        clearInterval(statusInterval);
+        if (loadingScreen) {
+            loadingScreen.classList.add('fade-out');
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 800);
+        }
+    };
+    
+    // Fallback: hide loading screen after 5 seconds maximum
+    setTimeout(() => {
+        if (loadingScreen && !loadingScreen.classList.contains('fade-out')) {
+            console.log('Fallback: hiding loading screen');
+            window.hideLoadingScreen();
+        }
+    }, 5000);
+});
+</script>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <!-- Game Controls -->
+            <div class="nav-group game-controls-group">
+                <div class="nav-control">
+                    <label for="difficulty-level">AI Level:</label>
+                    <select id="difficulty-level" class="nav-select">
+                        <option value="1">Beginner</option>
+                        <option value="2">Easy</option>
+                        <option value="3" selected>Intermediate</option>
+                        <option value="4">Advanced</option>
+                        <option value="5">Expert</option>
+                        <option value="6">Grandmaster</option>
+                    </select>
+                </div>
+                
+                <div class="nav-control">
+                    <label class="nav-checkbox">
+                        <input type="checkbox" id="max-capture-rule">
+                        <span>Max Capture</span>
+                    </label>
+                </div>
+                
+                <div class="nav-control">
+                    <label class="nav-checkbox">
+                        <input type="checkbox" id="time-control">
+                        <span>60s Timer</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Position Controls -->
+            <div class="nav-group position-controls-group">
+                <button id="edit-mode" class="nav-tab">
+                    <span>✏️ Edit</span>
+                </button>
+                <button id="import-fen" class="nav-tab">
+                    <span>📥 Import</span>
+                </button>
+                <button id="export-fen" class="nav-tab">
+                    <span>📤 Export</span>
+                </button>
+                <button id="save-png" class="nav-tab">
+                    <span>💾 Save</span>
+                </button>
+                <input type="file" id="load-png" accept="image/png" class="hidden">
+                <label for="load-png" class="nav-tab file-tab">
+                    <span>📁 Load</span>
+                </label>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Player Info Bar -->
+    <div class="players-bar">
+        <div class="player-card white-player">
+            <div class="player-name">White</div>
+            <div class="player-stats">
+                <span class="captured-pieces" id="white-captured">Captured: 0</span>
+                <span class="timer" id="white-timer">01:00</span>
+            </div>
+        </div>
+        
+        <div class="vs-separator">VS</div>
+        
+        <div class="player-card black-player">
+            <div class="player-name">Black</div>
+            <div class="player-stats">
+                <span class="captured-pieces" id="black-captured">Captured: 0</span>
+                <span class="timer" id="black-timer">01:00</span>
+            </div>
+        </div>
+    </div>
+<!-- Add this to your index.html after the players bar -->
+
+    <!-- Edit Mode Panel -->
+    <div id="edit-panel" class="edit-panel" style="display: none;">
+        <div class="edit-controls">
+            <h3>Edit Position</h3>
+            
+            <!-- Piece Selector -->
+            <div class="piece-selector">
+                <label>Select Piece:</label>
+                <div class="piece-options">
+                    <button class="piece-btn active" data-piece="1">
+                        <img src="assets/images/white_piece.png" alt="White">
+                        <span>White</span>
+                    </button>
+                    <button class="piece-btn" data-piece="2">
+                        <img src="assets/images/black_piece.png" alt="Black">
+                        <span>Black</span>
+                    </button>
+                    <button class="piece-btn" data-piece="3">
+                        <img src="assets/images/white_king.png" alt="White King">
+                        <span>W King</span>
+                    </button>
+                    <button class="piece-btn" data-piece="4">
+                        <img src="assets/images/black_king.png" alt="Black King">
+                        <span>B King</span>
+                    </button>
+                    <button class="piece-btn" data-piece="0">
+                        <span class="empty-square">✕</span>
+                        <span>Clear</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Turn Selector -->
+            <div class="turn-selector">
+                <label>First Move:</label>
+                <select id="first-player">
+                    <option value="1">White</option>
+                    <option value="2">Black</option>
+                </select>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="edit-actions">
+                <button id="clear-board" class="action-btn">Clear Board</button>
+                <button id="reset-position" class="action-btn">Reset Position</button>
+                <button id="start-game" class="action-btn primary">Start Game</button>
+            </div>
+        </div>
+    </div>
+    <div class="game-container">
+        <!-- Left Panel: Analysis and Move History -->
+        <div class="left-panel">
+            <!-- Analysis - Always Visible -->
+            <div class="control-section analysis">
+                <h3>Analysis</h3>
+                <div class="evaluation">
+                    <span>Best Move: </span>
+                    <span id="best-move">--</span>
+                </div>
+                <div class="evaluation">
+                    <span>Score: </span>
+                    <span id="evaluation-score">0.0</span>
+                </div>
+                <div class="evaluation">
+                    <span>Depth: </span>
+                    <span id="search-depth">0</span>
+                </div>
+                <div class="evaluation">
+                    <span>Phase: </span>
+                    <span id="game-phase">Opening</span>
+                </div>
+                <div class="evaluation">
+                    <span>Position: </span>
+                    <span id="position-tension">Quiet</span>
+                </div>
+                <div class="evaluation">
+                    <span>50-Move Rule: </span>
+                    <span id="fifty-move-counter">50 moves until draw</span>
+                </div>
+            </div>
+
+            <!-- Move History -->
+            <div class="control-section move-log">
+                <h3>Move Log</h3>
+                <div id="move-history" class="scrollable"></div>
+            </div>
+        </div>
+
+        <!-- Center Panel: Game Board -->
+        <div class="board-panel">
+            <!-- Game Board Container -->
+            <div class="game-board-container">
+                <div id="game-board" class="game-board">
+                    <!-- Board will be dynamically generated by JavaScript -->
+                </div>
+                <div id="draw-reason" style="display: none; text-align: center; margin-top: 10px; font-weight: bold;"></div>
+
+                <!-- Game Navigation Controls -->
+                <div class="game-controls">
+                    <button id="first-move" class="nav-button" title="First Move">
+                        <img src="assets/images/first.png" alt="First Move" class="button-icon">
+                    </button>
+                    <button id="prev-move" class="nav-button" title="Previous Move">
+                        <img src="assets/images/prev.png" alt="Previous Move" class="button-icon">
+                    </button>
+                    <button id="undo" class="nav-button" title="Undo Move">
+                        <span>↶</span>
+                    </button>
+                    <button id="redo" class="nav-button" title="Redo Move">
+                        <span>↷</span>
+                    </button>
+                    <button id="next-move" class="nav-button" title="Next Move">
+                        <img src="assets/images/next.png" alt="Next Move" class="button-icon">
+                    </button>
+                    <button id="last-move" class="nav-button" title="Last Move">
+                        <img src="assets/images/last.png" alt="Last Move" class="button-icon">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>Created by <a href="https://github.com/codewithheck" target="_blank" rel="noopener">@codewithheck</a></p>
+        </div>
+    </footer>
+
+    <!-- Main script -->
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
